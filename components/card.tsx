@@ -5,7 +5,7 @@ import Link from "next/link";
 const Card = () => {
   return (
     <div className="bg-white shadow-lg rounded-sm transition duration-100 hover:shadow-sm">
-      <div className="h-[260px] w-auto rounded-t-sm relative">
+      <div className="h-72 w-auto rounded-t-sm relative">
         <Image
           src="/hero.jpg"
           width={384}
