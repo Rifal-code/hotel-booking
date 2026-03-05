@@ -2,7 +2,7 @@ import { LoginGoogleButton } from "@/components/login-button";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "sign In",
+  title: "Sign In",
 };
 
 const SigninPage = () => {
