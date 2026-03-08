@@ -5,10 +5,93 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Room {
+  id            String          @id @default(cuid())
+  name          String
+  description   String          @db.Text
+  image         String
+  price         Int
+  capacity      Int             @default(1)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  RoomAmenities RoomAmenities[]
+  ReserVation   Reservation[]
+}
+
+model Amenities {
+  id            String          @id @default(cuid())
+  name          String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  RoomAmenities RoomAmenities[]
+}
+
+model RoomAmenities {
+  id          String @id @default(cuid())
+  roomId      String
+  amenitiesId String
+
+  Room      Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  Amenities Amenities @relation(fields: [amenitiesId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, amenitiesId])
+}
+
+model Reservation {
+  id        String   @id @default(cuid())
+  userId    String
+  roomId    String
+  startDate DateTime
+  endDate   DateTime
+  price     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String        @id @default(cuid())
+  name          String?
+  email         String        @unique
+  emailVerified DateTime?
+  image         String?
+  role          String        @default("user")
+  phone         String?
+  accounts      Account[]
+  ReserVation   Reservation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
 }
