@@ -1,7 +1,16 @@
+import { useActionState } from "react";
+import { ContactMessage } from "@/lib/action";
+
 const ContactForm = () => {
+  const [state, FormAction] = useActionState(ContactMessage, null);
   return (
     <div className="bg-white p-8 rounded-sm shadow-sm">
-      <form action="">
+      {state?.message ? (
+        <div className="p-4 mb-4 text-sm text-gray-800 rounded-lg bg-green-50">
+          <div className="font-medium">{state.message}</div>
+        </div>
+      ) : null}
+      <form action={FormAction}>
         <div className="grid md:grid-cols-2 gap-7 mt6">
           <div>
             <input
@@ -11,7 +20,7 @@ const ContactForm = () => {
               className="bg-gray-50 p-3 border border-gray-200 rounded-sm w-full font-light "
             />
             <div aria-live="polite" aria-atomic="true">
-              <p className="tex-sm text-red-500 mt-2">message</p>
+              <p className="tex-sm text-red-500 mt-2">{state?.error?.name}</p>
             </div>
           </div>
           <div>
@@ -22,7 +31,7 @@ const ContactForm = () => {
               className="bg-gray-50 p-3 border border-gray-200 rounded-sm w-full font-light "
             />
             <div aria-live="polite" aria-atomic="true">
-              <p className="tex-sm text-red-500 mt-2">message</p>
+              <p className="tex-sm text-red-500 mt-2">{state?.error?.email}</p>
             </div>
           </div>
           <div className="md:col-span-2">
@@ -33,7 +42,9 @@ const ContactForm = () => {
               className="bg-gray-50 p-3 border border-gray-200 rounded-sm w-full font-light "
             />
             <div aria-live="polite" aria-atomic="true">
-              <p className="tex-sm text-red-500 mt-2">message</p>
+              <p className="tex-sm text-red-500 mt-2">
+                {state?.error?.subject}
+              </p>
             </div>
           </div>
           <div className="md:col-span-2">
@@ -44,7 +55,9 @@ const ContactForm = () => {
               className="bg-gray-50 p-3 border border-gray-200 rounded-sm w-full font-light "
             ></textarea>
             <div aria-live="polite" aria-atomic="true">
-              <p className="tex-sm text-red-500 mt-2">message</p>
+              <p className="tex-sm text-red-500 mt-2">
+                {state?.error?.message}
+              </p>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { email, object, string } from "zod";
 
-export const contactSchema = object({
+export const ContactSchema = object({
   name: string().min(6, "Name at least 6 character"),
   email: string()
     .min(6, "Email at least 6 character")
