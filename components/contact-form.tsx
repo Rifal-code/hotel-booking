@@ -1,12 +1,15 @@
+"use client";
+
 import { useActionState } from "react";
 import { ContactMessage } from "@/lib/action";
+import { clsx } from "clsx";
 
 const ContactForm = () => {
-  const [state, FormAction] = useActionState(ContactMessage, null);
+  const [state, FormAction, isPending] = useActionState(ContactMessage, null);
   return (
     <div className="bg-white p-8 rounded-sm shadow-sm">
       {state?.message ? (
-        <div className="p-4 mb-4 text-sm text-gray-800 rounded-lg bg-green-50">
+        <div className="p-4 mb-4 text-sm text-gray-800 rounded-lg bg-green-200">
           <div className="font-medium">{state.message}</div>
         </div>
       ) : null}
@@ -62,8 +65,16 @@ const ContactForm = () => {
           </div>
         </div>
 
-        <button className="px-10 py-4 text-center font-semibold text-white w-full bg-orange-400 rounded-sm hover:bg-orange-500 cursor-pointer">
-          Send Message
+        <button
+          disabled={isPending}
+          className={clsx(
+            "px-10 py-4 text-center font-semibold text-white w-full bg-orange-400 rounded-sm hover:bg-orange-500 cursor-pointer",
+            {
+              "opacity-50 cursor-progress animate-pulse": isPending,
+            },
+          )}
+        >
+          {isPending ? "Loading..." : "Send Message"}
         </button>
       </form>
     </div>
